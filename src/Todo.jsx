@@ -1,6 +1,6 @@
 import React, { useState } from 'react' ;
 import { View, StyleSheet } from 'react-native';
-import { Text, Button, Divider, List, ListItem, Input } from '@ui-kitten/components';
+import { Text, Button, Divider, List, ListItem, Input, CheckBox } from '@ui-kitten/components';
 import { Icon } from 'react-native-eva-icons';
 
 export const Todo = () => {
@@ -9,21 +9,41 @@ export const Todo = () => {
     const todoItems = [
         {
             id: 0,
-            text: 'Buy milk'
+            text: 'Buy milk',
+            done: true,
+            deleted: false
         },
         {
             id: 1,
-            text: 'Pick up dry-cleaning'
+            text: 'Pick up dry-cleaning',
+            done: false,
+            deleted: false
         },
         {
             id: 2,
-            text: 'Do something else'
+            text: 'Do something else',
+            done: false,
+            deleted: false
+        },
+        {
+            id: 2,
+            text: 'Do something else',
+            done: true,
+            deleted: true
         }
     ];
     
-    const TodoListItem = ({ item }) => (
-        <ListItem title={`${item.text} ${item.id}`} />
-    );
+    const TodoListItem = ({ item }) => {
+        return (
+        <ListItem>
+            <CheckBox
+                checked={item.done}
+                style={styles.checkbox}
+                /* onChange={nextChecked => setChecked(nextChecked)} */>
+            </CheckBox>
+            <Text style={item.done ? styles.listItemDone : {}}>{ item.text }</Text>
+        </ListItem>
+    )};
 
     const PlusIcon = () => (
         <Icon
@@ -35,18 +55,16 @@ export const Todo = () => {
 
     return (
         <View style={styles.todoContainer}>
-            <View style={styles.header}>
-                <Text category='h3'>Welcome to the todo app!</Text>
-            </View>
             
             {/* Add a new todo item */}
-            <Text category='label'>Add a new todo</Text>
-            <View style={[
-                styles.addTodoForm
-                // ,debug.blueDashedBorder
-            ]}>
-                <Input value={text}  placeholder="What do you want to do?" onChangeText={text => setText(text)} style={styles.todoInput} />
-                <Button accessoryLeft={PlusIcon}>Add it!</Button>
+            <View style={[ styles.addTodoForm ]}>
+                <Input
+                    value={text}
+                    placeholder="What do you want to do?"
+                    onChangeText={text => setText(text)}
+                    style={[styles.todoInput]}
+                />
+                <Button accessoryLeft={PlusIcon} style={styles.addTodoButton}>Add it!</Button>
             </View>
 
             {/* List all the todo items */}
@@ -63,13 +81,10 @@ export const Todo = () => {
 const styles = StyleSheet.create({
     todoContainer: {
         width: '100%',
+        padding: 20
     },
     header: {
         alignItems: 'center'
-    },
-    plusIcon: {
-        width: 24,
-        height: 24
     },
     todoListContainer: {
         maxHeight: 200,
@@ -77,10 +92,33 @@ const styles = StyleSheet.create({
     addTodoForm: {
         display: 'flex',
         flexDirection: 'row',
-        flexGrow: 1,
+        justifyContent: 'flex-start',
+        alignContent: 'stretch',
+        height: 60,
+        marginBottom: 25
     },
     todoInput: {
-        flexGrow: 1
+        flexGrow: 1,
+        flexShrink: 0,
+        flexBasis: '50%',
+        flexDirection: 'row'
+    },
+    addTodoButton: {
+        flexGrow: 0,
+        flexShrink: 1,
+        flexBasis: 'auto'
+    },
+    plusIcon: {
+        width: 24,
+        height: 24
+    },
+    checkbox: {
+        marginRight: 10
+    },
+    listItemDone: {
+        color: '#aaaaaa',
+        textDecorationLine: 'line-through', 
+        textDecorationStyle: 'solid'
     }
 });
 
