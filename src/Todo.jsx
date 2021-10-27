@@ -5,33 +5,34 @@ import { Icon } from 'react-native-eva-icons';
 
 export const Todo = () => {
     const [text, setText] = useState('')
-    
-    const todoItems = [
+    const [todos, setTodo] = useState([
         {
-            id: 0,
             text: 'Buy milk',
             done: true,
             deleted: false
         },
         {
-            id: 1,
             text: 'Pick up dry-cleaning',
             done: false,
             deleted: false
         },
         {
-            id: 2,
             text: 'Do something else',
             done: false,
             deleted: false
         },
         {
-            id: 2,
             text: 'Do something else',
             done: true,
             deleted: true
         }
-    ];
+    ]);
+    
+    const handleSubmit = () => {
+        const newTodo = { text: text, done: false, deleted: false };
+        setTodo([...todos, newTodo])
+        setText('');
+    }
     
     const TodoListItem = ({ item }) => {
         return (
@@ -64,13 +65,13 @@ export const Todo = () => {
                     onChangeText={text => setText(text)}
                     style={[styles.todoInput]}
                 />
-                <Button accessoryLeft={PlusIcon} style={styles.addTodoButton}>Add it!</Button>
+                <Button accessoryLeft={PlusIcon} style={styles.addTodoButton} onPress={handleSubmit}>Add it!</Button>
             </View>
 
             {/* List all the todo items */}
             <List
                 style={styles.todoListContainer}
-                data={todoItems}
+                data={todos}
                 ItemSeparatorComponent={Divider}
                 renderItem={TodoListItem}
             />
