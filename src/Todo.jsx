@@ -40,15 +40,22 @@ export const Todo = () => {
         updatedTodos[index].done = isDone;
         setTodo([...updatedTodos]);
     }
+
+    const handleDelete = index => {
+        const updatedTodos = todos;
+        updatedTodos.splice(index, 1);
+        setTodo([...updatedTodos]);
+    }
     
     const TodoListItem = ({ item, index }) => (
-        <ListItem key={index}>
+        <ListItem key={index} style={styles.todoListItem}>
             <CheckBox
                 checked={item.done}
                 style={styles.checkbox}
                 onChange={nextChecked => setChecked(nextChecked, index)}>
-                <Text style={item.done ? styles.listItemDone : {}}>{ item.text }</Text>
             </CheckBox>
+            <Text style={item.done ? styles.listItemDone : {}}>{ item.text }</Text>
+            <Button accessoryLeft={TrashIcon} appearance={'ghost'} onPress={ () => handleDelete(index) }></Button>
         </ListItem>
     );
 
@@ -57,6 +64,14 @@ export const Todo = () => {
             name='plus-circle-outline'
             fill='#ffffff'
             style={styles.plusIcon}
+        />
+    );
+    
+    const TrashIcon = () => (
+        <Icon
+            name='trash'
+            fill='#3366ff'
+            style={styles.trashIcon}
         />
     );
 
@@ -103,6 +118,13 @@ const styles = StyleSheet.create({
         height: 60,
         marginBottom: 25
     },
+    todoListItem: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+
+    },
     todoInput: {
         flexGrow: 1,
         flexShrink: 0,
@@ -118,11 +140,17 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24
     },
+    trashIcon: {
+        width: 24,
+        height: 24,
+        alignSelf: 'flex-end'
+    },
     checkbox: {
+        marginRight: 10
     },
     listItemDone: {
         color: '#aaaaaa',
-        textDecorationLine: 'line-through', 
+        textDecorationLine: 'line-through',
         textDecorationStyle: 'solid'
     }
 });
