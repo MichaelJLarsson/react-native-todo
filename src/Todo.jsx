@@ -27,24 +27,30 @@ export const Todo = () => {
             deleted: true
         }
     ]);
+
     
     const handleSubmit = () => {
         const newTodo = { text: text, done: false, deleted: false };
         setTodo([...todos, newTodo])
         setText('');
     }
+
+    const setChecked = (isDone, index) => {
+        const updatedTodos = todos;
+        updatedTodos[index].done = isDone;
+        setTodo([...updatedTodos]);
+    }
     
-    const TodoListItem = ({ item }) => {
-        return (
-        <ListItem>
+    const TodoListItem = ({ item, index }) => (
+        <ListItem key={index}>
             <CheckBox
                 checked={item.done}
                 style={styles.checkbox}
-                /* onChange={nextChecked => setChecked(nextChecked)} */>
+                onChange={nextChecked => setChecked(nextChecked, index)}>
+                <Text style={item.done ? styles.listItemDone : {}}>{ item.text }</Text>
             </CheckBox>
-            <Text style={item.done ? styles.listItemDone : {}}>{ item.text }</Text>
         </ListItem>
-    )};
+    );
 
     const PlusIcon = () => (
         <Icon
@@ -88,7 +94,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     todoListContainer: {
-        maxHeight: 200,
     },
     addTodoForm: {
         display: 'flex',
@@ -114,7 +119,6 @@ const styles = StyleSheet.create({
         height: 24
     },
     checkbox: {
-        marginRight: 10
     },
     listItemDone: {
         color: '#aaaaaa',
