@@ -46,17 +46,30 @@ export const Todo = () => {
         updatedTodos.splice(index, 1);
         setTodo([...updatedTodos]);
     }
+
+    const handleEdit = () => {
+        // ...
+    }
     
     const TodoListItem = ({ item, index }) => (
-        <ListItem key={index} style={styles.todoListItem}>
+        <ListItem key={index} style={[styles.todoListItem]}>
             <CheckBox
                 checked={item.done}
                 style={styles.checkbox}
                 onChange={nextChecked => setChecked(nextChecked, index)}>
             </CheckBox>
-            <Text style={item.done ? styles.listItemDone : {}}>{ item.text }</Text>
+            <Text style={[styles.toDoText, item.done ? styles.listItemDone : {}]}>{ item.text }</Text>
+            <Button accessoryLeft={PenIcon} appearance={'ghost'} onPress={ () => handleEdit(index) }></Button>
             <Button accessoryLeft={TrashIcon} appearance={'ghost'} onPress={ () => handleDelete(index) }></Button>
         </ListItem>
+    );
+
+    const TodoIcon = ({ name }) => (
+        <Icon
+            name={name}
+            fill='#3366ff'
+            style={styles.trashIcon}
+        />
     );
 
     const PlusIcon = () => (
@@ -67,13 +80,9 @@ export const Todo = () => {
         />
     );
     
-    const TrashIcon = () => (
-        <Icon
-            name='trash'
-            fill='#3366ff'
-            style={styles.trashIcon}
-        />
-    );
+    const TrashIcon = () => <TodoIcon name='trash-outline' />;
+    
+    const PenIcon = () => <TodoIcon name='edit-outline' />;
 
     return (
         <View style={styles.todoContainer}>
@@ -109,6 +118,15 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     todoListContainer: {
+    todoListItem: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    listItemDone: {
+        color: '#aaaaaa',
+        textDecorationLine: 'line-through',
+        textDecorationStyle: 'solid'
     },
     addTodoForm: {
         display: 'flex',
@@ -117,12 +135,6 @@ const styles = StyleSheet.create({
         alignContent: 'stretch',
         height: 60,
         marginBottom: 25
-    },
-    todoListItem: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
 
     },
     todoInput: {
@@ -143,16 +155,14 @@ const styles = StyleSheet.create({
     trashIcon: {
         width: 24,
         height: 24,
-        alignSelf: 'flex-end'
+    },
+    penIcon: {
+        width: 24,
+        height: 24,
     },
     checkbox: {
-        marginRight: 10
+        marginRight: 10,
     },
-    listItemDone: {
-        color: '#aaaaaa',
-        textDecorationLine: 'line-through',
-        textDecorationStyle: 'solid'
-    }
 });
 
 const debug = StyleSheet.create({
